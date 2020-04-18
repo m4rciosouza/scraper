@@ -10,8 +10,11 @@ import java.util.List;
 @Service
 public class ProductDetailsServiceImpl implements ProductDetailsService {
 
-  public static final String CALORIES_SELECTOR = ".nutritionTable tbody tr";
-  public static final String DESCRIPTION_SELECTOR = "#information .productText p";
+  private static final String CALORIES_SELECTOR = ".nutritionTable tbody tr";
+  private static final String DESCRIPTION_SELECTOR = "#information .productText p";
+  private static final String TD = "td";
+  private static final String KCAL = "kcal";
+  private static final String EMPTY = "";
 
   @Override
   public Integer parseCalories(Document document) {
@@ -19,11 +22,11 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
     if (nutritionTable.isEmpty() || nutritionTable.size() < 2) {
       return null;
     }
-    String caloriesText = nutritionTable.get(1).select("td").first().html();
+    String caloriesText = nutritionTable.get(1).select(TD).first().html();
     if (caloriesText == null) {
       return null;
     }
-    return new Integer(caloriesText.replace("kcal", ""));
+    return new Integer(caloriesText.replace(KCAL, EMPTY));
   }
 
   @Override
