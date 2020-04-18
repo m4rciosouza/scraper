@@ -14,8 +14,7 @@ public class ProductServiceImpl implements ProductService {
   private static final String LINKS_SELECTOR = "ul li.gridItem div.productNameAndPromotions a";
   private static final String PRICES_SELECTOR = ".pricingAndTrolleyOptions p.pricePerUnit";
   private static final String NON_NUMERIC_REGEX = "[^0-9.]";
-  private static final String LEVEL_UP_URL_REGEX = "../";
-  private static final String HREF = "href";
+  private static final String HREF = "abs:href";
   private static final String EMPTY = "";
 
   @Override
@@ -35,12 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public List<String> parseDetailsUrls(Document document) {
-    return document
-      .select(LINKS_SELECTOR)
-      .eachAttr(HREF)
-      .stream()
-      .map(url -> url.replaceAll(LEVEL_UP_URL_REGEX, EMPTY))
-      .collect(Collectors.toList());
+    return document.select(LINKS_SELECTOR).eachAttr(HREF);
   }
 
 }

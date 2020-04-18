@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import uk.co.sainsburys.scraper.services.ProductDetailsService;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static uk.co.sainsburys.scraper.utils.ResourceUtils.loadHtmlAsString;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class ProductDetailsServiceImplTest {
 

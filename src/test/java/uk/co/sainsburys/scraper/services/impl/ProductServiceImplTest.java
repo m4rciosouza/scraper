@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import uk.co.sainsburys.scraper.services.ProductService;
 
 import java.io.IOException;
@@ -15,11 +16,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static uk.co.sainsburys.scraper.utils.ResourceUtils.loadHtmlAsString;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class ProductServiceImplTest {
 
   private static final String TITLE = "Sainsbury's Strawberries 400g";
-  private static final String URL = "shgroceriberries-cherries-curransainsburys-british-strawberries-400g.html";
+  private static final String URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-british-strawberries-400g.html";
   private static final BigDecimal UNIT_PRICE = new BigDecimal("1.75");
   public static final int TOTAL_ENTRIES = 17;
   private static Document document;
