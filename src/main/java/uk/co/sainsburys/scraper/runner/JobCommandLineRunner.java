@@ -18,15 +18,22 @@ public class JobCommandLineRunner implements CommandLineRunner {
   private static ObjectMapper mapper = new ObjectMapper();
 
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
     long initialTime = System.currentTimeMillis();
     System.out.println("Running scrape service...");
-    ProductResponse response = scrapperService.execute();
-    long finalTime = System.currentTimeMillis();
-    System.out.println("Scrape service executed successfully in " + (finalTime - initialTime) + "ms.");
-    System.out.println("Printing response JSON:");
-    String responseJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-    System.out.println(responseJson);
+    try {
+      ProductResponse response = scrapperService.execute();
+      long finalTime = System.currentTimeMillis();
+      System.out.println("Scrape service executed successfully in " + (finalTime - initialTime) + "ms.");
+      System.out.println("Printing response JSON:");
+      String responseJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+      System.out.println(responseJson);
+    } catch(Exception e) {
+      System.out.println("Something went wrong running the application.");
+      System.out.println("Error message: " + e.getMessage());
+      System.out.println("Make sure you are connected to the Internet and try it again.");
+      System.exit(1);
+    }
   }
 
 }

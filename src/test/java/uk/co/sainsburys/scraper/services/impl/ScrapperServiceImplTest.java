@@ -1,8 +1,10 @@
 package uk.co.sainsburys.scraper.services.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +24,8 @@ import java.math.BigDecimal;
 import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.skyscreamer.jsonassert.JSONAssert.*;
+import static uk.co.sainsburys.scraper.utils.ResourceUtils.loadHtmlAsString;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -33,6 +37,8 @@ public class ScrapperServiceImplTest {
   private static final BigDecimal UNIT_PRICE = new BigDecimal("1.75");
   private static final Integer CALORIES = 33;
   private static final String DESCRIPTION = "by Sainsbury's strawberries";
+
+  private static ObjectMapper mapper = new ObjectMapper();
 
   @Autowired
   private ScrapperService service;
@@ -76,6 +82,20 @@ public class ScrapperServiceImplTest {
     ProductResponse response = service.execute();
     assertEquals(GROSS, response.getTotal().getGross());
     assertEquals(VAT, response.getTotal().getVat());
+  }
+
+  @Test
+  public void testShouldThrowIOExceptionWhenSiteNotAvailable() throws IOException {
+    when(jsoupService.getDocument(anyString())).thenThrow(new IOException());
+    assertThrows(IOException.class, () -> service.execute());
+  }
+
+  @Test
+  public void testValidJsonIsGenerated() throws Exception {
+    String matchJson = loadHtmlAsString("sample-response.json");
+    ProductResponse response = service.execute();
+    String responseJson = mapper.writeValueAsString(response);
+    assertEquals(matchJson, responseJson, true);
   }
 
 }
